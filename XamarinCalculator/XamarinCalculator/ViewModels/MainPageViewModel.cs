@@ -16,11 +16,21 @@ namespace XamarinCalculator.ViewModels
             Title = "Main Page";
             InputText = "";
             OutputText = "";
+            calcOperatorArray = new List<char>();
+            inputOneState = true;
+            calcOperatorArray.Add('+');
+            calcOperatorArray.Add('-');
+            calcOperatorArray.Add('*');
+            calcOperatorArray.Add('/');
             OnNumberPressed = new DelegateCommand<object>(OnSelect);
         }
 
+        private List<char> calcOperatorArray { get; }
         private bool equalState { get; set; }
-
+        private bool inputOneState { get; set; }
+        private bool inputTwoState { get; set; }
+        private double input1 { get; set; }
+        private double input2 { get; set; }
         string inputText;
         public string InputText
         {
@@ -41,7 +51,11 @@ namespace XamarinCalculator.ViewModels
             {
                 InputText = "";
                 OutputText = "";
+                input1 = 0;
+                input2 = 0;
                 equalState = false;
+                inputOneState = true;
+                inputTwoState = false;
             }));
 
         private DelegateCommand equalPressed;
@@ -53,78 +67,103 @@ namespace XamarinCalculator.ViewModels
                 equalState = true;
                 }
                 var calcOperator = CheckOperator(InputText);
-                CalculateOutput(InputText, calcOperator);
+                CalculateOutput(calcOperator);
             }));
 
         public DelegateCommand<object> OnNumberPressed { get; private set; }
 
-        public void OnSelect(object args)
+        public char convertToChar(object arg) 
+        {
+            string temp = (string)arg;
+            char[] temparr = temp.ToCharArray();
+            char input = temparr[0];
+            return input;
+        }
+
+        public void EqualReset() 
         {
             if (equalState)
             {
                 InputText = "";
+                input1 = 0;
+                input2 = 0;
+                inputOneState = true;
+                inputTwoState = false;
                 equalState = false;
             }
-            InputText += args;
         }
 
-        public void CalculateOutput(string input, string calcOperator)
+        public void StateOneData(char input)
         {
-            string[] newInput;
-            string tempString1;
-            string tempString2;
-            double Input1;
-            double Input2;
+            if (calcOperatorArray.Contains(input) && inputOneState)
+            {
+                input1 = Int32.Parse(InputText);
+                inputOneState = false;
+                inputTwoState = true;
+            }
+        }
+
+        public void StateTwoData(object arg, char input)
+        {
+            if (inputTwoState)
+            {
+                if (!calcOperatorArray.Contains(input))
+                {
+                    string tempstring = input2.ToString();
+                    if (tempstring == "0")
+                    {
+                        tempstring = (string)arg;
+                    }
+                    else
+                    {
+                        tempstring += arg;
+                    }
+                    input2 = Int32.Parse(tempstring);
+                }
+            }
+        }
+        public void OnSelect(object args)
+        {
+            char input = convertToChar(args);
+
+            EqualReset();
+
+            StateOneData(input);
+
+            InputText += args;
+
+            StateTwoData(args, input);
+        }
+
+        public void CalculateOutput(string calcOperator)
+        {
+            
             double Output;
 
             switch (calcOperator) 
             {
                 case "+":
-                    newInput = input.Split('+');
-                    tempString1 = newInput[0];
-                    Input1 = Int32.Parse(tempString1);
-
-
-                    tempString2 = newInput[1];
-                    Input2 = Int32.Parse(tempString2);
-
-                    Output = Input1 + Input2;
+                    
+                    Output = input1 + input2;
                     OutputText = Output.ToString();
                     break;
                 case "-":
-                    newInput = input.Split('-');
-                    tempString1 = newInput[0];
-                    Input1 = Int32.Parse(tempString1);
-
-
-                    tempString2 = newInput[1];
-                    Input2 = Int32.Parse(tempString2);
-
-                    Output = Input1 - Input2;
+                    Output = input1 - input2;
                     OutputText = Output.ToString();
                     break;
                 case "*":
-                    newInput = input.Split('*');
-                    tempString1 = newInput[0];
-                    Input1 = Int32.Parse(tempString1);
-
-
-                    tempString2 = newInput[1];
-                    Input2 = Int32.Parse(tempString2);
-
-                    Output = Input1 * Input2;
+                    Output = input1 * input2;
                     OutputText = Output.ToString();
                     break;
                 case "/":
-                    newInput = input.Split('/');
-                    tempString1 = newInput[0];
-                    Input1 = Int32.Parse(tempString1);
-
-
-                    tempString2 = newInput[1];
-                    Input2 = Int32.Parse(tempString2);
-
-                    Output = Input1 / Input2;
+                    if (input2 == 0)
+                    {
+                        Output = 0;
+                    }
+                    else 
+                    { 
+                        Output = input1 / input2;
+                    }
                     OutputText = Output.ToString();
                     break;
                 default:
