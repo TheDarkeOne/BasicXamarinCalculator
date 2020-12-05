@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="XamarinCalculator.Views.MainPage"
+             Title="{Binding Title}">
+
+    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <Grid RowSpacing="1"
+          ColumnSpacing="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Entry Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Margin="1"  IsReadOnly="True" Text="{Binding InputText, Mode=TwoWay}"></Entry>
+            <Entry Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" IsReadOnly="True" Text="{Binding OutputText, Mode=TwoWay}"></Entry>
+            <Button Grid.Row="2" Grid.Column="1" Text="1" Command="{Binding OnNumberPressed}" CommandParameter="1"></Button>
+            <Button Grid.Row="2" Grid.Column="2" Text="2"  Command="{Binding OnNumberPressed}" CommandParameter="2"></Button>
+            <Button Grid.Row="2" Grid.Column="3" Text="3"  Command="{Binding OnNumberPressed}" CommandParameter="3"></Button>
+            <Button Grid.Row="2" Grid.Column="4" Text="+"  Command="{Binding OnNumberPressed}" CommandParameter="+"></Button>
+            <Button Grid.Row="3" Grid.Column="1" Text="4"  Command="{Binding OnNumberPressed}" CommandParameter="4"></Button>
+            <Button Grid.Row="3" Grid.Column="2" Text="5"  Command="{Binding OnNumberPressed}" CommandParameter="5"></Button>
+            <Button Grid.Row="3" Grid.Column="3" Text="6"  Command="{Binding OnNumberPressed}" CommandParameter="6"></Button>
+            <Button Grid.Row="3" Grid.Column="4" Text="-"  Command="{Binding OnNumberPressed}" CommandParameter="-"></Button>
+            <Button Grid.Row="4" Grid.Column="1" Text="7"  Command="{Binding OnNumberPressed}" CommandParameter="7"></Button>
+            <Button Grid.Row="4" Grid.Column="2" Text="8"  Command="{Binding OnNumberPressed}" CommandParameter="8"></Button>
+            <Button Grid.Row="4" Grid.Column="3" Text="9"  Command="{Binding OnNumberPressed}" CommandParameter="9"></Button>
+            <Button Grid.Row="4" Grid.Column="4" Text="*"  Command="{Binding OnNumberPressed}" CommandParameter="*"></Button>
+            <Button Grid.Row="5" Grid.Column="1" Text="C"  Command="{Binding ClearPressed}" CommandParameter="C"></Button>
+            <Button Grid.Row="5" Grid.Column="2" Text="0"  Command="{Binding OnNumberPressed}" CommandParameter="0"></Button>
+            <Button Grid.Row="5" Grid.Column="3" Text="="  Command="{Binding EqualPressed}" CommandParameter="="></Button>
+            <Button Grid.Row="5" Grid.Column="4" Text="/"  Command="{Binding OnNumberPressed}" CommandParameter="/"></Button>
+
+        </Grid>
+    </StackLayout>
+
+</ContentPage>
