@@ -13,7 +13,7 @@ namespace XamarinCalculator.ViewModels
         public MainPageViewModel(INavigationService navigationService)
             : base(navigationService)
         {
-            Title = "Main Page";
+            Title = "Simple Calculator";
             InputText = "";
             OutputText = "";
             calcOperatorArray = new List<char>();
