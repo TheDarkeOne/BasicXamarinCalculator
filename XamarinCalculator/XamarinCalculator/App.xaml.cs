@@ -5,11 +5,14 @@ using XamarinCalculator.Views;
 using Xamarin.Essentials.Interfaces;
 using Xamarin.Essentials.Implementation;
 using Xamarin.Forms;
+using Refit;
+using XamarinCalculator.Services;
 
 namespace XamarinCalculator
 {
     public partial class App
     {
+        string scheduleAddress = "http://localhost:5000/";
         public App(IPlatformInitializer initializer)
             : base(initializer)
         {
@@ -26,8 +29,15 @@ namespace XamarinCalculator
         {
             containerRegistry.RegisterSingleton<IAppInfo, AppInfoImplementation>();
 
+
+
+            var EPService = RestService.For<ICredentialService>(scheduleAddress);
+            containerRegistry.RegisterInstance(EPService);
+
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+            containerRegistry.RegisterForNavigation<CredentialListPage, CredentialListPageViewModel>();
+            containerRegistry.RegisterForNavigation<AddCredentialPage, AddCredentialPageViewModel>();
         }
     }
 }

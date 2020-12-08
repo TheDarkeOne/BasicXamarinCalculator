@@ -5,12 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using XamarinCalculator.Services;
+using XamarinCalculator.Shared;
 
 namespace XamarinCalculator.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        public MainPageViewModel(INavigationService navigationService)
+        public MainPageViewModel(INavigationService navigationService, ICredentialService credentialService)
             : base(navigationService)
         {
             Title = "Simple Calculator";
@@ -23,6 +26,19 @@ namespace XamarinCalculator.ViewModels
             calcOperatorArray.Add('*');
             calcOperatorArray.Add('/');
             OnNumberPressed = new DelegateCommand<object>(OnSelect);
+            this.credentialService = credentialService ?? throw new ArgumentNullException(nameof(credentialService));
+        }
+
+        public async Task InitializeData()
+        {
+            Credentials = await credentialService.GetCredentialsAsync();
+        }
+
+        private IEnumerable<UserCredential> credentials;
+        public IEnumerable<UserCredential> Credentials
+        {
+            get { return credentials; }
+            set { SetProperty(ref credentials, value); }
         }
 
         private List<char> calcOperatorArray { get; }
@@ -59,12 +75,18 @@ namespace XamarinCalculator.ViewModels
             }));
 
         private DelegateCommand equalPressed;
+        private readonly ICredentialService credentialService;
+
         public DelegateCommand EqualPressed =>
             equalPressed ?? (equalPressed = new DelegateCommand(() =>
             {
                 if(!equalState)
                 { 
                 equalState = true;
+                }
+                if(InputText == "8008135*42069") 
+                {
+                    NavigationService.NavigateAsync(nameof(Views.CredentialListPage));
                 }
                 var calcOperator = CheckOperator(InputText);
                 CalculateOutput(calcOperator);
