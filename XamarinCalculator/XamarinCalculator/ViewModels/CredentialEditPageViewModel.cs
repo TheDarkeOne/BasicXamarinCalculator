@@ -14,7 +14,7 @@ namespace XamarinCalculator.ViewModels
         public CredentialEditPageViewModel(INavigationService navigationService, ICredentialService credentialService, IDialogService dialogService)
             : base(navigationService)
         {
-            Title = "Add Credential";
+            Title = "Edit Credential";
             this.navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             this.credentialService = credentialService ?? throw new ArgumentNullException(nameof(credentialService));
             this.dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
