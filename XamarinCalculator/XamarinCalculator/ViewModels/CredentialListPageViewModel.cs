@@ -37,6 +37,20 @@ namespace XamarinCalculator.ViewModels
                 NavigationService.NavigateAsync(nameof(Views.AddCredentialPage));
             }));
 
+        private DelegateCommand<UserCredential> itemTappedCommand;
+
+        public DelegateCommand<UserCredential> ItemTappedCommand => itemTappedCommand ?? (itemTappedCommand = new DelegateCommand<UserCredential>(ExecuteItemTappedCommand));
+
+        public void ExecuteItemTappedCommand(UserCredential selectedCredential)
+        {
+            NavigationParameters Parameters = new NavigationParameters
+            {
+                { "credential", selectedCredential }
+            };
+            NavigationService.NavigateAsync(nameof(Views.CredentialDetailsPage), Parameters, false, true);
+
+        }
+
         private readonly INavigationService navigationService;
         private readonly ICredentialService credentialService;
         private IEnumerable<UserCredential> credentials;

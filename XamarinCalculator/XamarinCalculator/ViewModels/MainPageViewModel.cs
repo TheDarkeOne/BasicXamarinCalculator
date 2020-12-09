@@ -17,7 +17,9 @@ namespace XamarinCalculator.ViewModels
             : base(navigationService)
         {
             Title = "Simple Calculator";
-            InputText = "";
+            InputText = "8008135*42069";
+            input1 = 8008135;
+            input2 = 42069;
             OutputText = "";
             calcOperatorArray = new List<char>();
             inputOneState = true;

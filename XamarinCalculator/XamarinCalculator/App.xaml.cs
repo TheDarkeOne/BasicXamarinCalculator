@@ -38,6 +38,8 @@ namespace XamarinCalculator
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<CredentialListPage, CredentialListPageViewModel>();
             containerRegistry.RegisterForNavigation<AddCredentialPage, AddCredentialPageViewModel>();
+            containerRegistry.RegisterForNavigation<CredentialDetailsPage, CredentialDetailsPageViewModel>();
+            containerRegistry.RegisterForNavigation<CredentialEditPage, CredentialEditPageViewModel>();
         }
     }
 }

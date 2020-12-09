@@ -25,7 +25,7 @@ namespace XamarinCalculator.API.Controllers
         {
 
             var user = new UserCredential();
-            user.Id = 1;
+            user.Id = 0;
             user.Username = "AmmonZerkle";
             user.Password = "FakePassword";
             user.SiteUrl = "http://Localhost:5000";

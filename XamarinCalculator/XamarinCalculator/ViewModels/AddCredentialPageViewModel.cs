@@ -22,13 +22,35 @@ namespace XamarinCalculator.ViewModels
         private readonly INavigationService navigationService;
         private readonly ICredentialService credentialService;
 
+        string username;
+        public string Username
+        {
+            get => username;
+            set { SetProperty(ref username, value); }
+        }
+
+        string password;
+        public string Password
+        {
+            get => password;
+            set { SetProperty(ref password, value); }
+        }
+
+        string siteUrl;
+        public string SiteUrl
+        {
+            get => siteUrl;
+            set { SetProperty(ref siteUrl, value); }
+        }
+
         private DelegateCommand addCredential;
 
         public DelegateCommand AddCredential =>
             addCredential ?? (addCredential = new DelegateCommand(() =>
             {
-                var credential = new UserCredential(0, "AmmonsTestUser", "AmmonsTestPassword", "http://localhost:5000");
+                var credential = new UserCredential(0, Username, Password, SiteUrl);
                 credentialService.AddCredential(credential);
+                navigationService.GoBackAsync();
             }));
 
         private DelegateCommand updateCredential;
@@ -36,7 +58,7 @@ namespace XamarinCalculator.ViewModels
         public DelegateCommand UpdateCredential =>
             updateCredential ?? (updateCredential = new DelegateCommand(() =>
             {
-                var credential1 = new UserCredential(1, "TestUser1Editted", "GenericPasswordEditted", "https://github.com/TheDarkeOne/CalenderSchedule.git");
+                var credential1 = new UserCredential(3, "AmmonsTestUserEditted", "AmmonsTestPasswordEditted", "http://localhost:5000");
                 credentialService.UpdateCredential(credential1);
             }));
 
@@ -45,7 +67,7 @@ namespace XamarinCalculator.ViewModels
         public DelegateCommand DeleteCredential =>
             deleteCredential ?? (deleteCredential = new DelegateCommand(() =>
             {
-                var credential1 = new UserCredential(1, "TestUser1", "GenericPassword", "https://github.com/TheDarkeOne/CalenderSchedule.git");
+                var credential1 = new UserCredential(3, "AmmonsTestUserEditted", "AmmonsTestPasswordEditted", "http://localhost:5000");
                 credentialService.DeleteCredential(credential1);
             }));
         
