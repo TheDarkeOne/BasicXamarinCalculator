@@ -11,16 +11,18 @@ namespace XamarinCalculator.ViewModels
 {
     public class CredentialEditPageViewModel : ViewModelBase
     {
-        public CredentialEditPageViewModel(INavigationService navigationService, ICredentialService credentialService)
+        public CredentialEditPageViewModel(INavigationService navigationService, ICredentialService credentialService, IDialogService dialogService)
             : base(navigationService)
         {
             Title = "Add Credential";
             this.navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             this.credentialService = credentialService ?? throw new ArgumentNullException(nameof(credentialService));
+            this.dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         }
 
         private readonly INavigationService navigationService;
         private readonly ICredentialService credentialService;
+        private readonly IDialogService dialogService;
 
         public UserCredential Credential { get; private set; }
 
@@ -72,11 +74,20 @@ namespace XamarinCalculator.ViewModels
         private DelegateCommand editCredential;
 
         public DelegateCommand EditCredential =>
-            editCredential ?? (editCredential = new DelegateCommand(() =>
+            editCredential ?? (editCredential = new DelegateCommand(async () =>
             {
                 Credential = new UserCredential(Id, Username, Password, SiteUrl);
-                credentialService.UpdateCredential(Credential);
-                navigationService.GoBackAsync();
+                
+                try
+                {
+                    await credentialService.UpdateCredential(Credential);
+                }
+                catch
+                {
+                    await dialogService.ShowDialog("You cannot Edit a credential When you are not connected", "Cant Edit", "OK");
+                }
+                
+                await navigationService.GoBackAsync();
             }));
     }
 }

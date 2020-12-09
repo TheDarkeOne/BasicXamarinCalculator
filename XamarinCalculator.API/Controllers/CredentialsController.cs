@@ -47,6 +47,13 @@ namespace XamarinCalculator.API.Controllers
             return await repository.GetSingleCredential(Id);
         }
 
+        
+        [HttpPost("[action]")]
+        public async Task UpdateCredentialList([FromBody] IEnumerable<UserCredential> userCredentials)
+        {
+            await repository.UpdateCredentialListAsync(userCredentials);
+        }
+
         [HttpPost("[action]")]
         public async Task CreateCredential([FromBody] UserCredential userCredential)
         {

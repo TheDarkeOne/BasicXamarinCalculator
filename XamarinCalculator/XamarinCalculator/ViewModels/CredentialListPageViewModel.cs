@@ -12,12 +12,15 @@ namespace XamarinCalculator.ViewModels
 {
     public class CredentialListPageViewModel : ViewModelBase
     {
-        public CredentialListPageViewModel(INavigationService navigationService, ICredentialService credentialService)
+        public CredentialListPageViewModel(INavigationService navigationService, ICredentialService credentialService, ILocalDataService localDataService)
             : base(navigationService)
         {
             Title = "Saved Credentials";
+            this.localDataService = localDataService ?? throw new ArgumentNullException(nameof(localDataService));
             this.navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             this.credentialService = credentialService ?? throw new ArgumentNullException(nameof(credentialService));
+
+            localDataService.Initialize();
         }
 
 
@@ -26,8 +29,36 @@ namespace XamarinCalculator.ViewModels
         public DelegateCommand AccessCredentials =>
             accessCredentials ?? (accessCredentials = new DelegateCommand(async () =>
             {
-                Credentials = await credentialService.GetCredentialsAsync();
+                try 
+                {
+                    Credentials = await credentialService.GetCredentialsAsync();
+                    var tempCredentials = localDataService.GetCredentials();
+                    if (tempCredentials == null)
+                    {
+                        localDataService.CreateCredentialList(Credentials);
+                    }
+                    else 
+                    {
+                        localDataService.EmptyCredentialTable();
+                        localDataService.CreateCredentialList(Credentials);
+                    }
+                } 
+                catch 
+                {
+                    Credentials = localDataService.GetCredentials();
+                }
+                
         }));
+
+        private DelegateCommand accessLocalCredentials;
+
+        public DelegateCommand AccessLocalCredentials =>
+            accessLocalCredentials ?? (accessLocalCredentials = new DelegateCommand(async () =>
+            {
+
+                Credentials = localDataService.GetCredentials();
+
+            }));
 
         private DelegateCommand addPageNavigation;
 
@@ -53,6 +84,7 @@ namespace XamarinCalculator.ViewModels
 
         private readonly INavigationService navigationService;
         private readonly ICredentialService credentialService;
+        private readonly ILocalDataService localDataService;
         private IEnumerable<UserCredential> credentials;
 
         public IEnumerable<UserCredential> Credentials

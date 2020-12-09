@@ -34,6 +34,9 @@ namespace XamarinCalculator
             var EPService = RestService.For<ICredentialService>(scheduleAddress);
             containerRegistry.RegisterInstance(EPService);
 
+            containerRegistry.Register<ILocalDataService, SqlLiteDataService>();
+            containerRegistry.Register<IDialogService, DialogService>();
+
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<CredentialListPage, CredentialListPageViewModel>();

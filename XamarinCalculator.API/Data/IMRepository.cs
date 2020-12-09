@@ -51,5 +51,10 @@ namespace XamarinCalculator.API.Data
         {
             return credentialList.Where(u => u.Id == Id).FirstOrDefault();
         }
+
+        public Task UpdateCredentialListAsync(IEnumerable<UserCredential> userCredentials)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

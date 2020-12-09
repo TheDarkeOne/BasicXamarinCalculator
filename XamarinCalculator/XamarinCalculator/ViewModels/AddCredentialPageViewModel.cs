@@ -11,17 +11,18 @@ namespace XamarinCalculator.ViewModels
 {
     public class AddCredentialPageViewModel : ViewModelBase
     {
-        public AddCredentialPageViewModel(INavigationService navigationService, ICredentialService credentialService) 
+        public AddCredentialPageViewModel(INavigationService navigationService, ICredentialService credentialService, IDialogService dialogService) 
             : base(navigationService)
         {
             Title = "Add Credential";
             this.navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             this.credentialService = credentialService ?? throw new ArgumentNullException(nameof(credentialService));
+            this.dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         }
 
         private readonly INavigationService navigationService;
         private readonly ICredentialService credentialService;
-
+        private readonly IDialogService dialogService;
         string username;
         public string Username
         {
@@ -46,30 +47,20 @@ namespace XamarinCalculator.ViewModels
         private DelegateCommand addCredential;
 
         public DelegateCommand AddCredential =>
-            addCredential ?? (addCredential = new DelegateCommand(() =>
+            addCredential ?? (addCredential = new DelegateCommand(async () =>
             {
                 var credential = new UserCredential(0, Username, Password, SiteUrl);
-                credentialService.AddCredential(credential);
-                navigationService.GoBackAsync();
+
+                try
+                {
+                    await credentialService.AddCredential(credential);
+                }
+                catch
+                {
+                    await dialogService.ShowDialog("You cannot Add a credential When you are not connected", "Cant Add", "OK");
+                }
+                
+                await navigationService.GoBackAsync();
             }));
-
-        private DelegateCommand updateCredential;
-
-        public DelegateCommand UpdateCredential =>
-            updateCredential ?? (updateCredential = new DelegateCommand(() =>
-            {
-                var credential1 = new UserCredential(3, "AmmonsTestUserEditted", "AmmonsTestPasswordEditted", "http://localhost:5000");
-                credentialService.UpdateCredential(credential1);
-            }));
-
-        private DelegateCommand deleteCredential;
-
-        public DelegateCommand DeleteCredential =>
-            deleteCredential ?? (deleteCredential = new DelegateCommand(() =>
-            {
-                var credential1 = new UserCredential(3, "AmmonsTestUserEditted", "AmmonsTestPasswordEditted", "http://localhost:5000");
-                credentialService.DeleteCredential(credential1);
-            }));
-        
     }
 }

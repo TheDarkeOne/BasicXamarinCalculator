@@ -23,6 +23,9 @@ namespace XamarinCalculator.Services
         
         [Post("/credentials/DeleteCredential")]
         Task DeleteCredential(UserCredential userCredential);
+        
+        [Post("/credentials/UpdateCredentialList")]
+        Task UpdateCredentialList(IEnumerable<UserCredential> userCredential);
     }
 
 }

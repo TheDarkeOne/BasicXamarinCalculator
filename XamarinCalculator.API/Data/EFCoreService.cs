@@ -43,5 +43,13 @@ namespace XamarinCalculator.API.Data
             applicationDBContext.UserCredentials.Update(userCredential);
             await applicationDBContext.SaveChangesAsync();
         }
+
+        public async Task UpdateCredentialListAsync(IEnumerable<UserCredential> userCredentials)
+        {
+            var templist = await applicationDBContext.UserCredentials.ToListAsync();
+            applicationDBContext.UserCredentials.RemoveRange(templist);
+            applicationDBContext.UserCredentials.AddRange(userCredentials);
+            await applicationDBContext.SaveChangesAsync();
+        }
     }
 }

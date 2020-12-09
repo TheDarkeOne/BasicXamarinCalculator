@@ -11,10 +11,12 @@ namespace XamarinCalculator.ViewModels
 {
     public class CredentialDetailsPageViewModel : ViewModelBase
     {
-        public CredentialDetailsPageViewModel(INavigationService navigationService, ICredentialService credentialService) : base(navigationService)
+        public CredentialDetailsPageViewModel(INavigationService navigationService, ICredentialService credentialService, IDialogService dialogService) 
+            : base(navigationService)
         {
             Title = "Credential Detail Page";
             this.credentialService = credentialService ?? throw new ArgumentNullException(nameof(credentialService));
+            this.dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
         }
 
         public UserCredential Credential { get; private set; }
@@ -40,9 +42,9 @@ namespace XamarinCalculator.ViewModels
             set { SetProperty(ref password, value); }
         }
 
-        private string siteUrl;
         private readonly ICredentialService credentialService;
-
+        private readonly IDialogService dialogService;
+        private string siteUrl;
         public string SiteUrl
         {
             get => siteUrl;
@@ -79,9 +81,18 @@ namespace XamarinCalculator.ViewModels
 
         private DelegateCommand deleteCredential;
         public DelegateCommand DeleteCredential =>
-            deleteCredential ?? (deleteCredential = new DelegateCommand(() =>
+            deleteCredential ?? (deleteCredential = new DelegateCommand(async () =>
             {
-                credentialService.DeleteCredential(Credential);
+                try
+                {
+                    await credentialService.DeleteCredential(Credential);
+                }
+                catch
+                {
+                    await dialogService.ShowDialog("You cannot Delete a credential when you are not connected", "Cant Delete", "OK");
+                }
+
+                await NavigationService.GoBackAsync();
             }));
     }
 }

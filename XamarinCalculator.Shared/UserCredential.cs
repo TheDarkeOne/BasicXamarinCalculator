@@ -1,3 +1,4 @@
+using SQLite;
 using System;
 using System.Text.Json.Serialization;
 
@@ -20,7 +21,7 @@ namespace XamarinCalculator.Shared
             this.Password = Password;
             this.SiteUrl = SiteUrl;
         }
-
+        [PrimaryKey]
         public int Id { get; set; }
 
         public string Username { get; set; }

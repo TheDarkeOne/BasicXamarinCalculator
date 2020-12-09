@@ -13,5 +13,6 @@ namespace XamarinCalculator.API.Data
         Task AddCredentialAsync(UserCredential userCredential);
         Task EditCredentialAsync(UserCredential userCredential);
         Task DeleteCredentialAsync(UserCredential userCredential);
+        Task UpdateCredentialListAsync(IEnumerable<UserCredential> userCredentials);
     }
 }
